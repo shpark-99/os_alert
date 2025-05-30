@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>위치 권한 테스트</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      text-align: center;
+    }
+    button {
+      font-size: 18px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 16px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📍 위치 권한 요청 테스트</h2>
+  <p>아래 버튼을 눌러 위치 권한을 요청해보세요.</p>
+
+  <button onclick="getLocation()">위치 권한 요청</button>
+  <div id="result"></div>
+
+  <script>
+    function getLocation() {
+      const result = document.getElementById("result");
+
+      if (!navigator.geolocation) {
+        result.innerText = "이 브라우저는 위치 정보를 지원하지 않습니다.";
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          result.innerText = `✅ 위치 확인됨: 위도 ${lat.toFixed(6)}, 경도 ${lon.toFixed(6)}`;
+        },
+        (err) => {
+          switch (err.code) {
+            case err.PERMISSION_DENIED:
+              result.innerText = "❌ 위치 권한이 거부되었습니다.";
+              break;
+            case err.POSITION_UNAVAILABLE:
+              result.innerText = "❌ 위치 정보를 사용할 수 없습니다.";
+              break;
+            case err.TIMEOUT:
+              result.innerText = "⏱️ 위치 요청 시간이 초과되었습니다.";
+              break;
+            default:
+              result.innerText = "⚠️ 알 수 없는 오류가 발생했습니다.";
+          }
+        }
+      );
+    }
+  </script>
+
+</body>
+</html>
