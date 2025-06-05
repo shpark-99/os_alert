@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>모바일웹 위치 권한 테스트</title>
+  <title>위치 권한 요청 테스트</title>
   <style>
     body {
       font-family: sans-serif;
       padding: 2rem;
       text-align: center;
     }
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+
     button {
       font-size: 18px;
       padding: 14px 28px;
@@ -19,7 +24,8 @@
       border-radius: 8px;
       cursor: pointer;
     }
-    #status {
+
+    #result {
       margin-top: 30px;
       font-size: 16px;
       color: #333;
@@ -28,39 +34,39 @@
 </head>
 <body>
 
-  <h2>📍 모바일웹 위치 권한 팝업 테스트</h2>
-  <p>아래 버튼을 누르면 <strong>위치 권한 팝업</strong>이 뜨는지 확인할 수 있습니다.</p>
+  <h2>📍 위치 권한 팝업 테스트</h2>
+  <p>아래 버튼을 누르면 브라우저가 OS 위치 권한 팝업을 띄웁니다.</p>
 
   <button onclick="requestLocation()">위치 권한 요청</button>
-  <div id="status"></div>
+  <div id="result"></div>
 
   <script>
     function requestLocation() {
-      const status = document.getElementById('status');
+      const result = document.getElementById("result");
 
       if (!navigator.geolocation) {
-        status.innerText = "❌ 이 브라우저는 위치 정보를 지원하지 않습니다.";
+        result.innerText = "❌ 현재 브라우저는 위치 정보를 지원하지 않습니다.";
         return;
       }
 
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const { latitude, longitude } = pos.coords;
-          status.innerText = `✅ 위치 확인 성공: 위도 ${latitude.toFixed(6)}, 경도 ${longitude.toFixed(6)}`;
+          result.innerText = `✅ 위치 확인 성공: 위도 ${latitude.toFixed(6)}, 경도 ${longitude.toFixed(6)}`;
         },
         (err) => {
           switch (err.code) {
             case err.PERMISSION_DENIED:
-              status.innerText = "❌ 위치 권한이 거부되었습니다.";
+              result.innerText = "❌ 위치 권한이 거부되었습니다.";
               break;
             case err.POSITION_UNAVAILABLE:
-              status.innerText = "⚠️ 위치 정보를 사용할 수 없습니다.";
+              result.innerText = "⚠️ 위치 정보를 사용할 수 없습니다.";
               break;
             case err.TIMEOUT:
-              status.innerText = "⏱️ 위치 요청 시간이 초과되었습니다.";
+              result.innerText = "⏱️ 위치 요청 시간이 초과되었습니다.";
               break;
             default:
-              status.innerText = "⚠️ 알 수 없는 오류가 발생했습니다.";
+              result.innerText = "⚠️ 알 수 없는 오류가 발생했습니다.";
           }
         }
       );
